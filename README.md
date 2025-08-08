@@ -36,7 +36,10 @@ Web được thiết kế để quản lý ghi chú, công việc cần làm.
 ## Các bước cài đặt
 1. Clone Repository
 2. Cấu hình:
-  + Tạo cơ sở dữ liệu trên MySQL hoặc PostgreSQL
+  + Tạo cơ sở dữ liệu trên MySQL hoặc PostgreSQL với các thực thể sau :
+    + users(id, name, imageUrl)
+    + accounts(id, userId, email, password)
+    + notes(id, userId, title, content, isCompleted, tags, dueDate, priority, createdAt, updatedAt)
   + Cấu hình cho JWT trong file env
   + Đăng ký AWS S3 và tạo bucket, sử dụng Shared AWS credentials file và cấu hình tại file env
 3. Build : Chạy lệnh npm start cho fronend và backend
@@ -51,6 +54,7 @@ Web được thiết kế để quản lý ghi chú, công việc cần làm.
 
 ## API 
 <img width="1111" height="903" alt="image" src="https://github.com/user-attachments/assets/7b370c60-9dc2-4b7b-bee0-575f57d963fa" />
+
 
 
 
