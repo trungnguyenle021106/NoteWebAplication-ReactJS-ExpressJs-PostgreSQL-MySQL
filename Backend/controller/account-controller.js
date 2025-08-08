@@ -8,9 +8,10 @@ const bcrypt = require('bcryptjs'); // Nhập thư viện bcryptjs
 const jwt = require('jsonwebtoken'); // Nhập thư viện jsonwebtoken
 
 class AccountController {
-  constructor(accountRepository, userRepository) {
+  constructor(accountRepository, userRepository, s3Repository) {
     this.accountRepository = accountRepository;
     this.userRepository = userRepository;
+    this.s3Repository = s3Repository;
     this.jwtSecret = process.env.JWT_SECRET; // Lấy secret key từ biến môi trường
     if (!this.jwtSecret) {
       console.error('Lỗi: JWT_SECRET không được định nghĩa trong biến môi trường!');
@@ -23,34 +24,83 @@ class AccountController {
    * POST /api/register
    * Tạo một người dùng mới và một tài khoản liên kết.
    */
-  async register(req, res) {
-    try {
-      const { name, imageUrl, email, password } = req.body;
+  // file: backend/controller/account-controller.js
 
-      // Kiểm tra xem email đã tồn tại chưa
+  async register(req, res) {
+    let newUser = null;
+    let s3Key = null;
+
+    try {
+      const { name, email, password } = req.body;
+      const uploadedFile = req.file;
+
       const existingAccount = await this.accountRepository.readByEmail(email);
       if (existingAccount) {
-        return res.status(409).json({ message: 'Email đã được sử dụng.' }); // 409 Conflict
+        return res.status(409).json({ message: 'Email đã được sử dụng.' });
       }
 
-      // 1. Tạo người dùng mới (profile)
-      const newUser = await this.userRepository.create({ name, imageUrl });
+      // --- Bước 1: Tạo người dùng mới ---
+      newUser = await this.userRepository.create({ name, imageUrl: '' });
 
-      // 2. Tạo tài khoản liên kết với người dùng vừa tạo
+      // --- Bước 2: Tải ảnh lên S3 nếu có file ---
+      let s3ImageUrl = '';
+      if (uploadedFile) {
+        s3Key = `user_images/${newUser.id}-${uploadedFile.originalname}`;
+        await this.s3Repository.uploadFile(s3Key, uploadedFile.buffer, uploadedFile.mimetype);
+
+        // Cập nhật lại đường dẫn ảnh cho người dùng
+        s3ImageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3Key}`;
+        await this.userRepository.updateImageUrl(newUser.id, s3ImageUrl);
+      }
+
+      // --- Bước 3: Tạo tài khoản ---
       const newAccount = await this.accountRepository.create({
         userId: newUser.id,
         email,
-        password // Mật khẩu sẽ được băm trong Repository
+        password,
       });
 
+      // --- Bước 4: Hoàn thành và trả về phản hồi thành công ---
       res.status(201).json({
         message: 'Đăng ký thành công!',
-        user: newUser,
-        account: { id: newAccount.id, email: newAccount.email } // Không trả về mật khẩu
+        user: { ...newUser, imageUrl: s3ImageUrl },
+        account: { id: newAccount.id, email: newAccount.email },
       });
+
     } catch (error) {
-      console.error('Lỗi khi đăng ký:', error);
-      res.status(500).json({ message: error.message });
+      console.error('Lỗi khi đăng ký, bắt đầu quá trình dọn dẹp:', error);
+
+      // --- Các hành động bù trừ (Cleanup/Rollback) ---
+      try {
+        if (newUser && newUser.id) {
+          await this.userRepository.delete(newUser.id);
+          console.log(`Đã xóa user ID: ${newUser.id}`);
+        }
+
+        if (s3Key) {
+          await this.s3Repository.deleteFile(s3Key);
+          console.log(`Đã xóa file S3: ${s3Key}`);
+        }
+      } catch (cleanupError) {
+        console.error('Lỗi trong quá trình dọn dẹp:', cleanupError);
+      }
+      res.status(500).json({ message: error.message || 'Lỗi server.' });
+    }
+  }
+
+  /**
+   * Đăng xuất tài khoản bằng cách xóa JWT cookie.
+   * GET /api/logout
+   */
+  async logout(req, res) {
+    try {
+      // Xóa cookie có tên 'jwt'
+      res.clearCookie('jwt');
+
+      res.status(200).json({ message: 'Đăng xuất thành công!' });
+    } catch (error) {
+      console.error('Lỗi khi đăng xuất:', error);
+      res.status(500).json({ message: 'Không thể đăng xuất.' });
     }
   }
 

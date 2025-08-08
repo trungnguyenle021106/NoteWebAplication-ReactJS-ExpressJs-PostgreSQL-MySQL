@@ -22,7 +22,12 @@ app.use(cors(corsOptions));
 
 // === Cấu hình chọn Database ===
 const DATABASE_TYPE = process.env.DATABASE_TYPE || 'mysql';
+
 console.log(`Ứng dụng đang sử dụng database: ${DATABASE_TYPE.toUpperCase()}`);
+
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // === Khai báo các biến ===
 let dbContext;
@@ -45,7 +50,8 @@ if (DATABASE_TYPE === 'mysql') {
   console.error('Lỗi: DATABASE_TYPE không hợp lệ. Vui lòng đặt là "mysql" hoặc "postgresql".');
   process.exit(1);
 }
-
+const s3Context = require('./aws_context/s3-context');
+const S3Repository = require('./repositories/AWS/S3/S3Repository');
 const authMiddleware = require('./middlewarer/auth');
 
 // === Nhập các Controller và Route ===
@@ -61,10 +67,11 @@ const userRoutes = require('./routes/userRoutes');
 const noteRepository = new NoteRepository(dbContext);
 const userRepository = new UserRepository(dbContext);
 const accountRepository = new AccountRepository(dbContext);
+const s3Repository = new S3Repository(s3Context, process.env.AWS_BUCKET_NAME);
 
 const noteController = new NoteController(noteRepository);
 const userController = new UserController(userRepository);
-const accountController = new AccountController(accountRepository, userRepository);
+const accountController = new AccountController(accountRepository, userRepository, s3Repository);
 
 app.post('/api/check-status', authMiddleware, (req, res) => {
   res.status(200).json({
@@ -74,7 +81,7 @@ app.post('/api/check-status', authMiddleware, (req, res) => {
 });
 
 // === Gán các Route vào ứng dụng Express ===
-app.post('/api/register', accountController.register.bind(accountController));
+app.post('/api/register', upload.single('image'), accountController.register.bind(accountController));
 app.post('/api/login', accountController.login.bind(accountController));
 
 // Các route cần xác thực JWT

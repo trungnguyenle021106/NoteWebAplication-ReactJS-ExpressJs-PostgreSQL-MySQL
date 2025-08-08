@@ -1,5 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+const authMiddleware = require('../middlewarer/auth');
 
 module.exports = function (accountController) {
   /**
@@ -14,30 +18,33 @@ module.exports = function (accountController) {
    * /api/accounts/register:
    *   post:
    *     summary: Đăng ký một tài khoản mới
-   *     tags: 
+   *     tags:
    *       - Accounts
    *     requestBody:
    *       required: true
    *       content:
-   *         application/json:
+   *         multipart/form-data:
    *           schema:
    *             type: object
    *             properties:
    *               name:
    *                 type: string
-   *               imageUrl:
-   *                 type : string
    *               email:
    *                 type: string
    *               password:
    *                 type: string
+   *               image:
+   *                 type: string
+   *                 format: binary
    *     responses:
    *       201:
    *         description: Tài khoản đã được đăng ký thành công
    *       400:
    *         description: Lỗi từ phía người dùng, ví dụ như thiếu thông tin
+   *       409:
+   *         description: Email đã được sử dụng
    */
-  router.post('/register', accountController.register.bind(accountController));
+  router.post('/register', upload.single('image'), accountController.register.bind(accountController));
 
   /**
    * @swagger
@@ -141,6 +148,38 @@ module.exports = function (accountController) {
    *         description: Không tìm thấy tài khoản
    */
   router.delete('/:id', accountController.deleteAccount.bind(accountController));
+
+
+  /**
+   * @swagger
+   * /api/accounts/logout:
+   *   post:
+   *     summary: Đăng xuất khỏi tài khoản
+   *     tags:
+   *       - Accounts
+   *     responses:
+   *       200:
+   *         description: Đăng xuất thành công
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   example: "Đăng xuất thành công!"
+   *       500:
+   *         description: Không thể đăng xuất do lỗi máy chủ
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   example: "Không thể đăng xuất."
+   */
+  router.post('/logout', authMiddleware, accountController.logout.bind(accountController));
 
   return router;
 };

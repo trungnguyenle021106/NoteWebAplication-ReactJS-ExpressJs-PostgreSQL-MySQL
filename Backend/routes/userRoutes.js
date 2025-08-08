@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 module.exports = function (userController) {
   /**
    * @swagger
@@ -119,7 +121,7 @@ module.exports = function (userController) {
    *       404:
    *         description: Không tìm thấy người dùng
    */
-  router.put('/:id', userController.updateUser.bind(userController));
+  router.put('/:id', upload.single('image'), userController.updateUser.bind(userController));
 
   /**
    * @swagger

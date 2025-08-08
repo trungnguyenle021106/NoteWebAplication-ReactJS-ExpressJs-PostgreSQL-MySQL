@@ -47,7 +47,7 @@ class UserRepository extends BaseRepository {
         const values = Object.values(data);
         const query = `UPDATE users SET ${fields} WHERE id = ?`;
         try {
-            const [result] = await context.execute(query, [...values, id]);
+            const [result] = await this.context.execute(query, [...values, id]);
             if (result.affectedRows === 0) {
                 return null;
             }
@@ -67,6 +67,17 @@ class UserRepository extends BaseRepository {
             console.error(`Lỗi khi xóa người dùng với ID ${id}:`, error);
             throw new Error('Không thể xóa người dùng.');
         }
+    }
+
+     async updateImageUrl(id, imageUrl) {
+      try {
+        // Tái sử dụng phương thức update đã có
+        const updatedUser = await this.update(id, { imageUrl });
+        return updatedUser;
+      } catch (error) {
+        console.error(`Lỗi khi cập nhật ảnh đại diện cho người dùng với ID ${id}:`, error);
+        throw new Error('Không thể cập nhật ảnh đại diện.');
+      }
     }
 }
 

@@ -7,38 +7,46 @@ import { useNavigate } from 'react-router-dom';
 function Register({ onRegister }) {
   const [formData, setFormData] = useState({
     name: '',
-    imageUrl: '',
     email: '',
     password: '',
+    image: null, // Sử dụng 'image' để khớp với backend
   });
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
+    const { name, value, files } = e.target;
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: files ? files[0] : value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage('');
 
-    // Gửi dữ liệu đến API
     const result = await register(formData);
 
     if (result.success) {
-      alert('Đăng ký thành công! Vui lòng đăng nhập.');
-      // Chuyển hướng người dùng về trang đăng nhập
-      navigate('/login');
+      setMessage('Đăng ký thành công! Vui lòng đăng nhập.');
+      setFormData({ name: '', email: '', password: '', image: null });
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } else {
-      // Hiển thị thông báo lỗi nếu có
-      alert(result.message || 'Đăng ký thất bại.');
+      setMessage(result.message || 'Đăng ký thất bại.');
     }
+    setLoading(false);
   };
+
   return (
     <div className="register-container">
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Đăng ký tài khoản quản lý ghi chú</h2>
+        {message && <p className="message">{message}</p>}
         <div className="form-group">
           <label htmlFor="name">Tên người dùng</label>
           <input
@@ -52,14 +60,13 @@ function Register({ onRegister }) {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="imageUrl">URL ảnh đại diện</label>
+          <label htmlFor="image">Ảnh đại diện</label>
           <input
-            type="text"
-            id="imageUrl"
-            name="imageUrl"
-            value={formData.imageUrl}
+            type="file"
+            id="image"
+            name="image" // Tên trường 'image' phải khớp với backend
+            accept="image/*"
             onChange={handleChange}
-            placeholder="Nhập URL ảnh của bạn"
           />
         </div>
         <div className="form-group">
@@ -86,7 +93,9 @@ function Register({ onRegister }) {
             required
           />
         </div>
-        <button type="submit" className="register-btn">Đăng ký</button>
+        <button type="submit" className="register-btn" disabled={loading}>
+          {loading ? 'Đang đăng ký...' : 'Đăng ký'}
+        </button>
       </form>
     </div>
   );
