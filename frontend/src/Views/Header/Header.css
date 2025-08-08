@@ -1,0 +1,61 @@
+/* src/components/Header.css */
+.app-header {
+  background-color: #28a745;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.user-info-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 2px solid white;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.user-menu {
+  position: absolute;
+  top: 100%; /* Đặt menu bên dưới user-info */
+  right: 0;
+  background-color: white;
+  color: #333;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 10; /* Đảm bảo menu hiển thị trên các phần tử khác */
+  min-width: 150px;
+}
+
+.user-menu button {
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.user-menu button:hover {
+  background-color: #f0f0f0;
+}

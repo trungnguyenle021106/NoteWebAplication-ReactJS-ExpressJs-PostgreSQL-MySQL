@@ -1,0 +1,95 @@
+/* src/components/NoteForm.css */
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.note-form h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.note-form input,
+.note-form textarea,
+.note-form select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.note-form textarea {
+  resize: vertical;
+}
+
+.note-form input:focus,
+.note-form textarea:focus,
+.note-form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.note-form .form-row {
+  display: flex;
+  gap: 10px;
+  align-items: center; /* Căn giữa các thành phần trong hàng */
+}
+
+.note-form button {
+  background-color: #28a745;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.note-form button:hover {
+  background-color: #218838;
+}
+
+.note-form .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+}
+
+.note-form .close-btn:hover {
+  color: #333;
+}
+
+/* CSS cho checkbox */
+.note-form .form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.note-form .form-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.note-form .form-checkbox label {
+  font-size: 1rem;
+  color: #555;
+  cursor: pointer;
+}

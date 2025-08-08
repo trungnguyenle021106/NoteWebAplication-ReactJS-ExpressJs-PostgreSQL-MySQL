@@ -1,0 +1,121 @@
+/* src/components/NoteItem.css */
+.note {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 17px;
+  flex: 1 1 calc(24% - 15px);
+  box-sizing: border-box;
+  max-width: 24.5%; 
+  display: flex; /* Dùng flexbox để sắp xếp nội dung bên trong */
+  flex-direction: column;
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.note-title {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.note-priority {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+}
+
+.priority-thấp {
+  background-color: #28a745;
+}
+
+.priority-trung {
+  background-color: #ffc107;
+}
+
+.priority-cao {
+  background-color: #dc3545;
+}
+
+.note-content {
+  flex-grow: 1; /* Cho phép nội dung co giãn để các thẻ có chiều cao bằng nhau */
+  margin: 0 0 10px 0;
+  color: #666;
+}
+
+.note-info {
+  font-size: 14px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.note-tags {
+  margin-top: 5px;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-right: 5px;
+  font-size: 12px;
+}
+
+.note-status {
+  margin-bottom: 10px;
+}
+
+.status-label {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.incomplete {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.note-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto; /* Đẩy các nút xuống cuối thẻ */
+}
+
+.edit-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}

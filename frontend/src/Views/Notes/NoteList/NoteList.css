@@ -1,0 +1,15 @@
+/* src/components/NoteList.css */
+
+.notes {
+  padding: 20px;
+  /* Thêm các thuộc tính Flexbox sau */
+  display: flex;         /* Bật Flexbox cho container */
+  flex-wrap: wrap;       /* Cho phép các item xuống dòng khi không đủ chỗ */
+  gap: 15px;             /* Tạo khoảng cách giữa các item */
+}
+
+.note-inform{
+  text-align: center;
+  color: red;
+  font-size: 30px;
+}
