@@ -37,3 +37,36 @@ width: 100%;
     max-width: 500px;
     position: relative;
 }
+
+/* src/App.css */
+.custom-toast {
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 5px solid #28a745;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.custom-toast h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.custom-toast p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,12 +1,29 @@
 /* src/components/Header.css */
 .app-header {
-  background-color: #28a745;
+  background-color: purple;
   color: white;
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+}
+
+/* Thêm style cho logo web */
+.web-logo {
+  height: 70px; /* Điều chỉnh chiều cao theo ý muốn */
+  width: auto; /* Giữ tỷ lệ khung hình */
+}
+
+/* Style đặc biệt khi đang tải để căn giữa logo */
+.app-header.loading-header {
+  justify-content: center;
+}
+
+.header-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Thêm khoảng cách giữa các phần tử */
 }
 
 .user-info-container {
@@ -33,7 +50,7 @@
 
 .user-menu {
   position: absolute;
-  top: 100%; /* Đặt menu bên dưới user-info */
+  top: 100%;
   right: 0;
   background-color: white;
   color: #333;
@@ -43,7 +60,7 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  z-index: 10; /* Đảm bảo menu hiển thị trên các phần tử khác */
+  z-index: 10;
   min-width: 150px;
 }
 

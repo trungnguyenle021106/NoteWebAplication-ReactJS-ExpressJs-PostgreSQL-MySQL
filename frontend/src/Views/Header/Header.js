@@ -22,7 +22,8 @@ function Header({ onEditProfile }) {
     if (result.success) {
       navigate('/login');
     } else {
-      alert(result.message || "Đăng xuất thất bại.");
+      // Thay thế alert bằng một modal tùy chỉnh để trải nghiệm tốt hơn
+      console.error(result.message || "Đăng xuất thất bại.");
     }
   };
 
@@ -44,17 +45,31 @@ function Header({ onEditProfile }) {
     fetchUser();
   }, []);
 
+  // Tạo một thành phần logo để sử dụng lại
+  const logoComponent = (
+    // Bạn hãy thay thế URL hình ảnh dưới đây bằng URL logo thực tế của bạn
+    <img
+      src="/noteLogo.png"
+      alt="Logo Web"
+      className="web-logo"
+    />
+  );
+
   if (loading) {
-    return <header className="app-header"><h1>Đang tải...</h1></header>;
+    // Hiển thị logo khi đang tải
+    return <header className="app-header loading-header">{logoComponent}</header>;
   }
 
   if (!user) {
-    return <header className="app-header"><h1>Quản lý ghi chú</h1></header>;
+    // Hiển thị logo khi chưa có người dùng đăng nhập
+    return <header className="app-header">{logoComponent}</header>;
   }
 
   return (
+
     <header className="app-header">
-      <h1>Quản lý ghi chú</h1>
+      {/* Hiển thị logo ở đây thay vì tiêu đề h1 */}
+      {logoComponent}
       <div
         className="user-info-container"
         onMouseEnter={() => setIsMenuOpen(true)}
