@@ -45,7 +45,7 @@ Web được thiết kế để quản lý ghi chú, công việc cần làm.
 3. Build : Chạy lệnh npm start cho fronend và backend
 
 ## Một số hình ảnh web
-<img width="1895" height="869" alt="image" src="https://github.com/user-attachments/assets/a7852e00-8f80-44af-914c-a14ecc7b413a" />
+<img width="1907" height="865" alt="image" src="https://github.com/user-attachments/assets/bc916966-6d2e-4d77-9b04-a3139fc20702" />
 <img width="1874" height="621" alt="image" src="https://github.com/user-attachments/assets/a1f82492-dbdf-4525-9e99-49784f1bf305" />
 <img width="1908" height="553" alt="image" src="https://github.com/user-attachments/assets/fe79a4be-59dc-45b0-9bc4-771053096fee" />
 <img width="1914" height="414" alt="image" src="https://github.com/user-attachments/assets/34054268-0951-4779-8f08-3fce8942319f" />
@@ -54,6 +54,7 @@ Web được thiết kế để quản lý ghi chú, công việc cần làm.
 
 ## API 
 <img width="1111" height="903" alt="image" src="https://github.com/user-attachments/assets/7b370c60-9dc2-4b7b-bee0-575f57d963fa" />
+
 
 
 
